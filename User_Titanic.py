@@ -49,7 +49,7 @@ def ml_function():
             break
         else:
             print('Wrong active function, must be one of the three.')
-            time.sleep(5)
+            time.sleep(2)
     return question
 
 def ml_solver():
@@ -59,7 +59,7 @@ def ml_solver():
             break
         else:
             print('Wrong solver, must be one of the three.')
-            time.sleep(5)
+            time.sleep(2)
     return question
 
 def ml_neurons():
@@ -69,8 +69,8 @@ def ml_neurons():
             break
         else:
             print('The number must be positive and integer')
-            time.sleep(5)
-    return question
+            time.sleep(2)
+    return int(question)
 
 def ml_parameters():
     print('Choose the parameters:')
@@ -84,6 +84,20 @@ def ml_parameters():
     solver = ml_solver()
     return number_neurons, func, solver,train_input_norm, train_output_norm, test_input_norm, test_output_norm
 
+def continue_or_not():
+    while True:
+        print('Do you want go ahead and predict with your own values? (type 0)')
+        print('Do you want to test other parameters? (type 1)')
+        print('Do you want go back to the previous options? (Type 2)')
+        question = input ('Type:')
+        if int(question) in [0,1,2]:
+
+            break
+        else:
+            print('Wrong value, please try again: ')
+            time.sleep(5)
+
+    return int(question)
 def user_inputs():
     message = []
     # Fazendo um loop para garantir que as informações colocadas são número inteiros. Neste caso não estou limitando os valores
@@ -169,17 +183,25 @@ def main ():
         print('Choose one of the options:')
         print('Would you like to train the machine learning model to find the best parameters? (Type: 0)')
         print('Would you like to define the parameters to analyze the accuracy? (Type: 1)')
-        print('Would you like to use the previous parameters of the model? (Type: 2)')
+        print('Would you like to use the previous best parameters of the model? (Type: 2)')
         train_choose = input('type:')
         #trazer para lower case tudo
         if train_choose == '0':
             acc,ml_model = mlp_titanic.main()
+            time.sleep(2)
             break
-        elif train_choose == '1':
+
+        while train_choose == '1':
             numb_neur, func, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm = ml_parameters()
             acc,ml_model = mlp_titanic.train_model(numb_neur, func, solver,train_input_norm,
                                    train_output_norm, test_input_norm, test_output_norm)
-            break
+            time.sleep(2)
+            question = continue_or_not()
+            if question == 0:
+                break
+            if question == 2:
+                train_choose = 10
+
         elif train_choose == '2':
             train_data, test_data, aux_test_data = mlp_titanic.load_data()
             train_output_norm, train_input_norm = mlp_titanic.treat_data(train_data)
@@ -189,7 +211,11 @@ def main ():
             acc,ml_model = mlp_titanic.train_model(numb_neur =1, func = 'relu', solver = 'sgd',
                                                    train_input_norm=train_input_norm, train_output_norm=train_output_norm, test_input_norm=test_input_norm,
                                                    test_output_norm=test_output_norm)
+            time.sleep(2)
             break
+
+        elif question == 2:
+            print()
         else:
             print('The value typed must be 0 or 1, try again:' )
             time.sleep(5)
