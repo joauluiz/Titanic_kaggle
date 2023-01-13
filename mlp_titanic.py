@@ -87,6 +87,8 @@ def train_model(numb_neur, func, solver,train_input_norm, train_output_norm, tes
     modelo = scores['estimator'][:]
     # Pegando o índíce que obteve melhor score
     max_index = np.argmax(pontos)
+    #melhor modelo
+    best_model = modelo[max_index]
     # Calculando o as respostas da rede
     rede = modelo[max_index].predict(test_input_norm).reshape(-1, 1)
     # Realizando a desnomalização dos dados, para que seja possível os valores voltarem a ser 0 e 1 e assim fazer a comparação com os valores esperados
@@ -94,7 +96,7 @@ def train_model(numb_neur, func, solver,train_input_norm, train_output_norm, tes
     # Calculo da acurácia, comparando os valores desejados com os valores reais
     acc = accuracy_score(test_output_norm, rede)
     print(acc)
-    return acc
+    return acc, best_model
 
 
 def main():
@@ -129,7 +131,7 @@ def main():
                 solver = "adam"
             # Resetando o número de neurônios, pois estão sendo trocados as funções de ativação e os otimizadores
             for numb_neur in range(5):
-                acc = train_model(numb_neur, func, solver, train_input_norm, train_output_norm,
+                acc, model = train_model(numb_neur, func, solver, train_input_norm, train_output_norm,
                                   test_input_norm, test_output_norm)
                 # BEST PARAMETERS
                 if (acc > acc_best):
@@ -137,13 +139,14 @@ def main():
                     best_solver = solver
                     best_numb_neur = numb_neur
                     acc_best = acc
+                    best_model = model
 
     # Print sobre as informações do melhor modelo
     print("A melhor acurácia foi: ", acc_best)
     print("A função de ativação que obteve melhor resultado foi: ", best_func)
     print("O otimizador de peso que obteve melhor resultado foi: ", best_solver)
     print("A quantidade de neuronios na camada escondida que obteve melhor resultado foi: ", best_numb_neur + 1)
-
+    return best_model
 
 if __name__ == '__main__':
     main()
