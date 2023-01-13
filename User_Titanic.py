@@ -29,6 +29,38 @@ def number_int_positive (message):
             break
         else:
             print('The number must be positive and integer')
+            time.sleep(5)
+    return question
+
+def number_float_positive (message):
+    while True:
+        question = input(message)
+        if is_float(question) and question>0:
+            break
+        else:
+            print('The number must be positive and float')
+            time.sleep(5)
+    return question
+
+def ml_function ():
+    while True:
+        question = input('Choose an active function: relu, logistic or tanh.')
+        if question == 'relu' or question == 'logistic' or  question == 'tanh':
+            break
+        else:
+            print('Wrong active function, must be one of the three.')
+            time.sleep(5)
+    return question
+
+def ml_solver ():
+    while True:
+        question = input('Choose one of the solvers: lbfgs, sgd or adam')
+        if question == 'lbfgs' or question == 'sgd' or  question == 'adam':
+            break
+        else:
+            print('Wrong solver, must be one of the three.')
+            time.sleep(5)
+    return question
 
 
 
@@ -47,13 +79,15 @@ def main ():
             break
         elif train_choose == '1':
             train_data, test_data, aux_test_data = mlp_titanic.load_data()
-            while True
+            train_output_norm, train_input_norm = mlp_titanic.treat_data(train_data)
+            test_output_norm, test_input_norm = mlp_titanic.treat_data(test_data)
             print('Choose the parameters:')
-            numb_neur, func, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm
+            number_neurons, func, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm
             message = 'Please, type the number of neurons in the hidden layer:'
-            numb_neur = number_int_positive(message)
-            message = 'Please, type the number of neurons in the hidden layer:'
-            numb_neur = number_int_positive(message)
+            number_neurons = number_int_positive(message)
+            func = ml_function()
+            solver = ml_solver()
+
         else:
             print('The value typed must be 0 or 1, try again:' )
             time.sleep(5)
