@@ -32,7 +32,7 @@ def number_int_positive (message):
             time.sleep(5)
     return question
 
-def number_float_positive (message):
+def number_float_positive(message):
     while True:
         question = input(message)
         if is_float(question) and question>0:
@@ -42,7 +42,7 @@ def number_float_positive (message):
             time.sleep(5)
     return question
 
-def ml_function ():
+def ml_function():
     while True:
         question = input('Choose an active function: relu, logistic or tanh.')
         if question == 'relu' or question == 'logistic' or  question == 'tanh':
@@ -52,7 +52,7 @@ def ml_function ():
             time.sleep(5)
     return question
 
-def ml_solver ():
+def ml_solver():
     while True:
         question = input('Choose one of the solvers: lbfgs, sgd or adam')
         if question == 'lbfgs' or question == 'sgd' or  question == 'adam':
@@ -62,7 +62,26 @@ def ml_solver ():
             time.sleep(5)
     return question
 
+def ml_neurons():
+    while True:
+        question = input('Please, type the number of neurons in the hidden layer:')
+        if is_int(question) and question > 0:
+            break
+        else:
+            print('The number must be positive and integer')
+            time.sleep(5)
+    return question
 
+def ml_parameters():
+    print('Choose the parameters:')
+    train_data, test_data, aux_test_data = mlp_titanic.load_data()
+    train_output_norm, train_input_norm = mlp_titanic.treat_data(train_data)
+    test_output_norm, test_input_norm = mlp_titanic.treat_data(test_data)
+    number_neurons = ml_neurons()
+    func = ml_function()
+    solver = ml_solver()
+    return number_neurons, func, solver,train_input_norm, \
+        train_output_norm, test_input_norm, test_output_norm
 
 
 
@@ -70,24 +89,19 @@ def ml_solver ():
 def main ():
     while True:
         print('Choose one of the options:')
-        print('Would you like to train the machine learning model to find the best parameters (Type: 0)')
+        print('Would you like to train the machine learning model to find the best parameters? (Type: 0)')
         print('Would you like to define the parameters to analyze the accuracy? (Type: 1)')
+        print('Would you like to use the previous parameters of the model? (Type: 2)')
         train_choose = input('')
         #trazer para lower case tudo
         if train_choose == '0':
             ml_model = mlp_titanic.main()
             break
         elif train_choose == '1':
-            train_data, test_data, aux_test_data = mlp_titanic.load_data()
-            train_output_norm, train_input_norm = mlp_titanic.treat_data(train_data)
-            test_output_norm, test_input_norm = mlp_titanic.treat_data(test_data)
-            print('Choose the parameters:')
-            number_neurons, func, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm
-            message = 'Please, type the number of neurons in the hidden layer:'
-            number_neurons = number_int_positive(message)
-            func = ml_function()
-            solver = ml_solver()
-
+            numb_neur, func, solver, train_input_norm, \
+                train_output_norm, test_input_norm, test_output_norm = ml_parameters()
+            ml_model = mlp_titanic.train_model(numb_neur, func, solver,train_input_norm,
+                                   train_output_norm, test_input_norm, test_output_norm)
         else:
             print('The value typed must be 0 or 1, try again:' )
             time.sleep(5)
