@@ -215,8 +215,13 @@ def main ():
             if question == 2:
                 train_choose = 10
 
+        if train_choose == '1':
+            break
 
-        else:
+        if train_choose == 10:
+            time.sleep(0)
+
+        elif train_choose!= [0,1,2,10]:
             print('The value typed must be 0 or 1, try again:' )
             time.sleep(5)
 
