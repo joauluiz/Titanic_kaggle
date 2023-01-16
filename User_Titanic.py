@@ -187,7 +187,7 @@ def main ():
         train_choose = input('type:')
         #trazer para lower case tudo
         if train_choose == '0':
-            acc,ml_model = mlp_titanic.main()
+            ml_model = mlp_titanic.main()
             time.sleep(2)
             break
 
@@ -230,11 +230,13 @@ def main ():
         else:
             print("O resultado da rede é: Morreu\n")
         time.sleep(2)
-        new_inputs=input("Would you like to try new inputs?\nType 0 - Yes\nType 1 - No\nType")
-        if new_inputs == 0:
+        new_inputs=input("Would you like to try new inputs?\nType 0 - Yes\nType 1 - No\nType: ")
+        if new_inputs == '0':
             time.sleep(0)
-        elif new_inputs == 1
+        elif new_inputs == '1':
             break
     print("End of code")
+
+
 if __name__ == '__main__':
     main()

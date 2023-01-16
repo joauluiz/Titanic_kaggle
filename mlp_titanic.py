@@ -114,12 +114,12 @@ def main():
     acc_best = 0
 
     k=0
-    for k in range(3):
-        if (k == 0):
+    for i in range(3):
+        if (i == 0):
             func = "tanh"
-        elif (k == 1):
+        elif (i == 1):
             func = "logistic"
-        elif (k == 2):
+        elif (i == 2):
             func = "relu"
 
         # Loop para alteração dos otimizadores de pesos
@@ -138,9 +138,9 @@ def main():
                 # BEST PARAMETERS
 
                 if (acc > acc_best):
-                    print("The best accuracy found so far is: ",round(acc * 100, 2), "%", flush=True)
-                    print("The models are still being tested",flush=True)
-                    print("Number of iterations so far:", k, flush=True)
+                    print("The best accuracy found so far is: ",round(acc * 100, 2), "%")
+                    print("The models are still being tested")
+                    print("Number of iterations so far:", k)
                     best_func = func
                     best_solver = solver
                     best_numb_neur = numb_neur
