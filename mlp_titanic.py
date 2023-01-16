@@ -19,83 +19,94 @@ def load_data():
 
 
 
-#Tratamentos dos dados
-#Excluindo linhas vazias do dataset quando estiver faltando dados em pelo menos 1 coluna
+
+#Data cleaning
+#Excluding empty rows of the dataset when there is missing data in at least 1 column
 def treat_data(data):
+
     data = data[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Survived']].dropna()
-    # Atribuindo às varias de treinamento os inputs e outputs
+
+    # Assigning the training variables the inputs and outputs
     output_columns = data[['Survived']]
-    # Utilizei essas variáveis pos acreditei que elas tinham maior relação no resultado de sobreviver/morrer. Talvez seja interessante testar mais váriáveis depois
+
+    # I used these variables because I believed they had a higher relationship in the result of surviving/dying. Maybe it would be interesting to test more variables later
     input_columns = data[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']]
-    # Informações relevantes
-    # PassengerId: um ID único para cada passageiro.
-    # Survived: indica se o passageiro sobreviveu (1) ou não (0) ao acidente. Este é o rótulo que deve ser previsto para os passageiros do arquivo de teste.
-    # Pclass: a classe socioeconômica do passageiro (1 = primeira classe, 2 = segunda classe, 3 = terceira classe).
-    # Name: o nome do passageiro.
-    # Sex: o gênero do passageiro (masculino ou feminino).
-    # Age: a idade do passageiro (em anos).
-    # SibSp: o número de irmãos/cônjuges do passageiro a bordo do navio.
-    # Parch: o número de pais/filhos do passageiro a bordo do navio.
-    # Ticket: o número do bilhete do passageiro.
-    # Fare: o valor pago pelo bilhete do passageiro.
-    # Cabin: o número da cabine do passageiro.
-    # Embarked: o porto de embarque do passageiro (C = Cherbourg, Q = Queenstown, S = Southampton).
-    # Se por acaso há alguma valor sem ser male e female excluir as linhas (Isso serve para um hipotético caso em que informações sejam adicionadas indevidamente)
+
+    # Relevant information
+    # PassengerId: a unique ID for each passenger.
+    # Survived: indicates whether the passenger survived (1) or not (0) the accident. This is the label that should be predicted for the passengers in the test file.
+    # Pclass: the passenger's socioeconomic class (1 = first class, 2 = second class, 3 = third class).
+    # Name: the passenger's name.
+    # Sex: the passenger's gender (male or female).
+    # Age: the passenger's age (in years).
+    # SibSp: the number of siblings/spouses of the passenger on board the ship.
+    # Parch: the number of parents/children of the passenger on board the ship.
+    # Ticket: the passenger's ticket number.
+    # Fare: the value paid for the passenger's ticket.
+    # Cabin: the passenger's cabin number.
+    # Embarked: the passenger's port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton).
+
+    # If by chance there is any value other than male and female, delete the rows (This serves for a hypothetical case in which information is added improperly)
     mask = input_columns.loc[(input_columns["Sex"] != "male") & (input_columns["Sex"] != "female")]
     input_columns = input_columns.drop(mask.index)
-    # Alterando os valores de masculino para 0, para que possam entrar no modelo da rede neural
+
+    # Changing the values of male to 0, so that they can enter the neural network model
     mask = input_columns["Sex"] == "male"
     input_columns.loc[mask, "Sex"] = 0
-    # Alterando os valores de  feminino para 1, para que possam entrar no modelo da rede neural
+
+    # Changing the values of female to 1, so that they can enter the neural network model
     mask = input_columns["Sex"] == "female"
     input_columns.loc[mask, "Sex"] = 1
-    # Se por acaso há alguma valor sem ser S, Q e C, excluir as linhas (Isso serve para um hipotético caso em que informações sejam adicionadas indevidamente)
-    mask = input_columns.loc[
-    (input_columns["Embarked"] != "C") & (input_columns["Embarked"] != "Q") & (input_columns["Embarked"] != "S")]
+
+    # If by chance there is any value other than S, Q, and C, delete the rows (This serves for a hypothetical case in which information is added improperly)
+    mask = input_columns.loc[(input_columns["Embarked"] != "C") & (input_columns["Embarked"] != "Q") & (input_columns["Embarked"] != "S")]
     input_columns = input_columns.drop(mask.index)
-    # Alterando os valores dos pontos de embarque, C=1, Q=2 e S=3 para que possam entrar no modelo da rede neural
+
+    # Changing the values from embarkation points, C=1, Q=2 e S=3 so then they can be used by the neural network model
     mask = input_columns["Embarked"] == "C"
     input_columns.loc[mask, "Embarked"] = 1
     mask = input_columns["Embarked"] == "Q"
     input_columns.loc[mask, "Embarked"] = 2
     mask = input_columns["Embarked"] == "S"
     input_columns.loc[mask, "Embarked"] = 3
-    # Realizando a normalização dos dados
+
+    # Doing the data normalization
     input_norm = MinMaxScaler(feature_range=(-1, 1)).fit(input_columns).transform(input_columns)
     output_norm = MinMaxScaler(feature_range=(-1, 1)).fit(output_columns).transform(output_columns)
+
     return output_norm, input_norm
 
 
 #Criando um looping para fazer a variação dos parametros da rede para que seja possível avaliar qual mode possui melhor acurácia
-def train_model(numb_neur, func, solver,train_input_norm, train_output_norm, test_input_norm, test_output_norm):
+def train_model(number_neurons, function, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm):
     # Criando o modelo da rede neural
-    mlpc = MLPClassifier(hidden_layer_sizes=(numb_neur + 1),
-                         max_iter=10000,
-                         learning_rate_init=0.005,
-                         validation_fraction=0.15,
-                         activation=func,
-                         solver=solver,
-                         tol=1e-4,
-                         random_state=1)
+    multilayer_perceptron_classifier = MLPClassifier(hidden_layer_sizes=(number_neurons + 1),
+                                                     max_iter=10000,
+                                                     learning_rate_init=0.005,
+                                                     validation_fraction=0.15,
+                                                     activation=function,
+                                                     solver=solver,
+                                                     tol=1e-4,
+                                                     random_state=1)
     # Realizando o Cross-Validation k fold = 5 para avaliar qual modelo possui melhor resultado e que será usado para a fase de teste posteriormente
-    scores = cross_validate(mlpc, train_input_norm, train_output_norm.ravel(), cv=5,
+    scores = cross_validate(multilayer_perceptron_classifier, train_input_norm, train_output_norm.ravel(), cv=5,
                             scoring=('accuracy'),
                             return_train_score=True,
                             return_estimator=True)
     # Obtendos os scores dos modelos criados pelo Cross-Validation k fold=5
-    pontos = (scores['train_score'][:])
+    scores = (scores['train_score'][:])
     # Obtendo os modelos criados pelo Cross-Validation
-    modelo = scores['estimator'][:]
+    model = scores['estimator'][:]
     # Pegando o índíce que obteve melhor score
-    max_index = np.argmax(pontos)
+    max_index = np.argmax(scores)
     #melhor modelo
-    best_model = modelo[max_index]
+    best_model = model[max_index]
     # Calculando o as respostas da rede
-    rede = modelo[max_index].predict(test_input_norm).reshape(-1, 1)
+    output_model = model[max_index].predict(test_input_norm).reshape(-1, 1)
     # Realizando a desnomalização dos dados, para que seja possível os valores voltarem a ser 0 e 1 e assim fazer a comparação com os valores esperados
-    rede = MinMaxScaler(feature_range=(test_output_norm.min(), test_output_norm.max())).fit(rede).transform(rede)
+    output_model = MinMaxScaler(feature_range=(test_output_norm.min(), test_output_norm.max())).fit(output_model).transform(output_model)
     # Calculo da acurácia, comparando os valores desejados com os valores reais
-    acc = accuracy_score(test_output_norm, rede)
+    acc = accuracy_score(test_output_norm, output_model)
     return acc, best_model
 
 
@@ -111,7 +122,7 @@ def main():
     train_output_norm, train_input_norm = treat_data(train_data)
     test_output_norm, test_input_norm = treat_data(test_data)
 
-    acc_best = 0
+    best_accuracy = 0
 
     k=0
     for i in range(3):
@@ -133,25 +144,25 @@ def main():
             # Resetando o número de neurônios, pois estão sendo trocados as funções de ativação e os otimizadores
             for numb_neur in range(5):
                 k=k+1
-                acc, model = train_model(numb_neur, func, solver, train_input_norm, train_output_norm,
+                accuracy, model = train_model(numb_neur, func, solver, train_input_norm, train_output_norm,
                                   test_input_norm, test_output_norm)
                 # BEST PARAMETERS
 
-                if (acc > acc_best):
-                    print("\nThe best accuracy found so far is: ",round(acc * 100, 2), "%")
+                if (accuracy > best_accuracy):
+                    print("\nThe best accuracy found so far is: ",round(accuracy * 100, 2), "%")
                     print("The models are still being tested")
                     print("Number of iterations so far:", k)
-                    best_func = func
+                    best_function = func
                     best_solver = solver
-                    best_numb_neur = numb_neur
-                    acc_best = acc
+                    best_number_neurons = numb_neur
+                    best_accuracy = accuracy
                     best_model = model
 
     # Print sobre as informações do melhor modelo
-    print("A melhor acurácia foi: ", round(acc_best*100,2), "%")
-    print("A função de ativação que obteve melhor resultado foi: ", best_func)
+    print("A melhor acurácia foi: ", round(best_accuracy*100,2), "%")
+    print("A função de ativação que obteve melhor resultado foi: ", best_function)
     print("O otimizador de peso que obteve melhor resultado foi: ", best_solver)
-    print("A quantidade de neuronios na camada escondida que obteve melhor resultado foi: ", best_numb_neur + 1)
+    print("A quantidade de neuronios na camada escondida que obteve melhor resultado foi: ", best_number_neurons + 1)
     return best_model
 
 if __name__ == '__main__':

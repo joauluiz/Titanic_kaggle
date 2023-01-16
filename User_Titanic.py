@@ -180,11 +180,12 @@ def user_inputs():
 
 def main ():
     while True:
-        print('Choose one of the options:')
+        print('\nChoose one of the options:')
         print('Would you like to train the machine learning model to find the best parameters? (Type: 0)')
         print('Would you like to define the parameters to analyze the accuracy? (Type: 1)')
         print('Would you like to use the previous best parameters of the model (96 % accuracy)? (Type: 2)')
         train_choose = input('type:')
+
         #trazer para lower case tudo
         if train_choose == '0':
             ml_model = mlp_titanic.main()
@@ -197,7 +198,7 @@ def main ():
             aux_test_data = aux_test_data[["Survived"]]
             test_data = pd.concat([test_data, aux_test_data], axis=1)
             test_output_norm, test_input_norm = mlp_titanic.treat_data(test_data)
-            acc,ml_model = mlp_titanic.train_model(numb_neur =1, func = 'relu', solver = 'sgd',
+            acc,ml_model = mlp_titanic.train_model(number_neurons=1, function='relu', solver ='sgd',
                                                    train_input_norm=train_input_norm, train_output_norm=train_output_norm, test_input_norm=test_input_norm,
                                                    test_output_norm=test_output_norm)
             time.sleep(2)
@@ -231,9 +232,9 @@ def main ():
         V_Rede = ml_model.predict(inputs)
 
         if V_Rede[0]==1:
-            print("O resultado da rede é: Sobreviveu\n")
+            print("The model result is: Survived\n")
         else:
-            print("O resultado da rede é: Morreu\n")
+            print("The model result is: Died\n")
         time.sleep(2)
         new_inputs=input("Would you like to try new inputs?\nType 0 - Yes\nType 1 - No\nType: ")
         if new_inputs == '0':
