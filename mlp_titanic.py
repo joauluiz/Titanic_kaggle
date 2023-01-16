@@ -20,10 +20,11 @@ def load_data():
 
 
 
-#Data cleaning
-#Excluding empty rows of the dataset when there is missing data in at least 1 column
+
 def treat_data(data):
 
+    # Data cleaning
+    # Excluding empty rows of the dataset when there is missing data in at least 1 column
     data = data[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Survived']].dropna()
 
     # Assigning the training variables the inputs and outputs
@@ -76,10 +77,9 @@ def treat_data(data):
 
     return output_norm, input_norm
 
-
-#Criando um looping para fazer a variação dos parametros da rede para que seja possível avaliar qual mode possui melhor acurácia
 def train_model(number_neurons, function, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm):
-    # Criando o modelo da rede neural
+
+    # Creating the neural network mode
     multilayer_perceptron_classifier = MLPClassifier(hidden_layer_sizes=(number_neurons + 1),
                                                      max_iter=10000,
                                                      learning_rate_init=0.005,
@@ -88,35 +88,46 @@ def train_model(number_neurons, function, solver, train_input_norm, train_output
                                                      solver=solver,
                                                      tol=1e-4,
                                                      random_state=1)
-    # Realizando o Cross-Validation k fold = 5 para avaliar qual modelo possui melhor resultado e que será usado para a fase de teste posteriormente
+
+    # Performing k-fold Cross-Validation with k=5 to evaluate which model has the best result and will be used for the subsequent test phase
     scores = cross_validate(multilayer_perceptron_classifier, train_input_norm, train_output_norm.ravel(), cv=5,
                             scoring=('accuracy'),
                             return_train_score=True,
                             return_estimator=True)
-    # Obtendos os scores dos modelos criados pelo Cross-Validation k fold=5
+
+    # Obtaining the scores of the models created by k-fold Cross-Validation
     scores = (scores['train_score'][:])
-    # Obtendo os modelos criados pelo Cross-Validation
+
+    # Obtaining the models created by k-fold Cross-Validation
     model = scores['estimator'][:]
-    # Pegando o índíce que obteve melhor score
+
+    # Getting the index that obtained the best score
     max_index = np.argmax(scores)
-    #melhor modelo
+
+    # Best model
     best_model = model[max_index]
-    # Calculando o as respostas da rede
+
+    # Calculating the network's responses
     output_model = model[max_index].predict(test_input_norm).reshape(-1, 1)
-    # Realizando a desnomalização dos dados, para que seja possível os valores voltarem a ser 0 e 1 e assim fazer a comparação com os valores esperados
-    output_model = MinMaxScaler(feature_range=(test_output_norm.min(), test_output_norm.max())).fit(output_model).transform(output_model)
-    # Calculo da acurácia, comparando os valores desejados com os valores reais
+
+    # Denormalizing the data so that the values can return to 0 and 1 and thus make the comparison with the expected values
+    output_model = MinMaxScaler(feature_range=(test_output_norm.min(), test_output_norm.max())).fit(
+        output_model).transform(output_model)
+
+    # Accuracy calculation, comparing the desired values with the actual values
     acc = accuracy_score(test_output_norm, output_model)
+
     return acc, best_model
 
 
 def main():
-    # Leitura dos dados de treinamento
+
+    # Reading the training data
     train_data, test_data, aux_test_data = load_data()
 
     aux_test_data = aux_test_data[["Survived"]]
 
-    # Como as informações de teste sobre o Survived estavam em um outro csv, foi necessário fazer a concatenação das linhas desses dois documentos
+    # As the test information about Survived were in another csv, it was necessary to concatenate the rows of these two documents.
     test_data = pd.concat([test_data, aux_test_data], axis=1)
 
     train_output_norm, train_input_norm = treat_data(train_data)
@@ -124,6 +135,7 @@ def main():
 
     best_accuracy = 0
 
+    #Creating a loop so I can verify what parameters have the accuracy
     k=0
     for i in range(3):
         if (i == 0):
@@ -133,7 +145,7 @@ def main():
         elif (i == 2):
             func = "relu"
 
-        # Loop para alteração dos otimizadores de pesos
+        # Loop for changing the weights optimizers
         for j in range(3):
             if (j == 0):
                 solver = "lbfgs"
@@ -141,13 +153,14 @@ def main():
                 solver = "sgd"
             elif (j == 2):
                 solver = "adam"
-            # Resetando o número de neurônios, pois estão sendo trocados as funções de ativação e os otimizadores
+
+            # Resetting the number of neurons, as the activation functions and optimizers are being swapped.
             for numb_neur in range(5):
                 k=k+1
                 accuracy, model = train_model(numb_neur, func, solver, train_input_norm, train_output_norm,
                                   test_input_norm, test_output_norm)
-                # BEST PARAMETERS
 
+                #Enter in this if only if the current accuracy is higher than the best accuracy
                 if (accuracy > best_accuracy):
                     print("\nThe best accuracy found so far is: ",round(accuracy * 100, 2), "%")
                     print("The models are still being tested")
@@ -158,7 +171,7 @@ def main():
                     best_accuracy = accuracy
                     best_model = model
 
-    # Print sobre as informações do melhor modelo
+    # Prints about the informations of the best parameters
     print("A melhor acurácia foi: ", round(best_accuracy*100,2), "%")
     print("A função de ativação que obteve melhor resultado foi: ", best_function)
     print("O otimizador de peso que obteve melhor resultado foi: ", best_solver)
