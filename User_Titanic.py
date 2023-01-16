@@ -73,7 +73,7 @@ def ml_neurons():
     return int(question)
 
 def ml_parameters():
-    print('Choose the parameters:')
+    print('\nChoose the parameters:')
     train_data, test_data, aux_test_data = mlp_titanic.load_data()
     train_output_norm, train_input_norm = mlp_titanic.treat_data(train_data)
     aux_test_data = aux_test_data[["Survived"]]
@@ -103,7 +103,7 @@ def user_inputs():
     # Fazendo um loop para garantir que as informações colocadas são número inteiros. Neste caso não estou limitando os valores
     for i in range (4):
         if (i==0):
-            message[i] = input("Digite os valores para a Idade: ")
+            message[i] = input("\nDigite os valores para a Idade: ")
             msg = "Digite os valores para a Idade: "
         elif (i==1):
             message[i] = input("Digite os valores para o número de irmãos/cônjuges do passageiro a bordo do navio: ")
@@ -207,7 +207,7 @@ def main ():
             numb_neur, func, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm = ml_parameters()
             acc,ml_model = mlp_titanic.train_model(numb_neur, func, solver,train_input_norm,
                                    train_output_norm, test_input_norm, test_output_norm)
-            print("The accuracy for the model was: ",round(acc*100,2),"%")
+            print("The accuracy for the model is: ",round(acc*100,2),"%\n")
             time.sleep(2)
             question = continue_or_not()
             if question == 0:
@@ -240,7 +240,7 @@ def main ():
             time.sleep(0)
         elif new_inputs == '1':
             break
-    print("End of code")
+    print("\nEnd of code")
 
 
 if __name__ == '__main__':

@@ -138,7 +138,7 @@ def main():
                 # BEST PARAMETERS
 
                 if (acc > acc_best):
-                    print("The best accuracy found so far is: ",round(acc * 100, 2), "%")
+                    print("\nThe best accuracy found so far is: ",round(acc * 100, 2), "%")
                     print("The models are still being tested")
                     print("Number of iterations so far:", k)
                     best_func = func
