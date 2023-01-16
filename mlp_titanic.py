@@ -6,6 +6,7 @@ from sklearn.model_selection import cross_validate
 from sklearn.metrics import accuracy_score
 import warnings
 warnings.filterwarnings("ignore", category=Warning)
+from IPython.display import clear_output
 
 
 def load_data():
@@ -95,7 +96,6 @@ def train_model(numb_neur, func, solver,train_input_norm, train_output_norm, tes
     rede = MinMaxScaler(feature_range=(test_output_norm.min(), test_output_norm.max())).fit(rede).transform(rede)
     # Calculo da acurácia, comparando os valores desejados com os valores reais
     acc = accuracy_score(test_output_norm, rede)
-    print(acc)
     return acc, best_model
 
 
@@ -113,6 +113,7 @@ def main():
 
     acc_best = 0
 
+    k=0
     for k in range(3):
         if (k == 0):
             func = "tanh"
@@ -131,10 +132,15 @@ def main():
                 solver = "adam"
             # Resetando o número de neurônios, pois estão sendo trocados as funções de ativação e os otimizadores
             for numb_neur in range(5):
+                k=k+1
                 acc, model = train_model(numb_neur, func, solver, train_input_norm, train_output_norm,
                                   test_input_norm, test_output_norm)
                 # BEST PARAMETERS
+
                 if (acc > acc_best):
+                    print("The best accuracy found so far is: ",round(acc * 100, 2), "%", flush=True)
+                    print("The models are still being tested",flush=True)
+                    print("Number of iterations so far:", k, flush=True)
                     best_func = func
                     best_solver = solver
                     best_numb_neur = numb_neur
@@ -142,7 +148,7 @@ def main():
                     best_model = model
 
     # Print sobre as informações do melhor modelo
-    print("A melhor acurácia foi: ", acc_best)
+    print("A melhor acurácia foi: ", round(acc_best*100,2), "%")
     print("A função de ativação que obteve melhor resultado foi: ", best_func)
     print("O otimizador de peso que obteve melhor resultado foi: ", best_solver)
     print("A quantidade de neuronios na camada escondida que obteve melhor resultado foi: ", best_numb_neur + 1)

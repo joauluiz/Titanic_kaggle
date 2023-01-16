@@ -99,7 +99,7 @@ def continue_or_not():
 
     return int(question)
 def user_inputs():
-    message = []
+    message = [None] * 7
     # Fazendo um loop para garantir que as informações colocadas são número inteiros. Neste caso não estou limitando os valores
     for i in range (4):
         if (i==0):
@@ -183,24 +183,13 @@ def main ():
         print('Choose one of the options:')
         print('Would you like to train the machine learning model to find the best parameters? (Type: 0)')
         print('Would you like to define the parameters to analyze the accuracy? (Type: 1)')
-        print('Would you like to use the previous best parameters of the model? (Type: 2)')
+        print('Would you like to use the previous best parameters of the model (96 % accuracy)? (Type: 2)')
         train_choose = input('type:')
         #trazer para lower case tudo
         if train_choose == '0':
             acc,ml_model = mlp_titanic.main()
             time.sleep(2)
             break
-
-        while train_choose == '1':
-            numb_neur, func, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm = ml_parameters()
-            acc,ml_model = mlp_titanic.train_model(numb_neur, func, solver,train_input_norm,
-                                   train_output_norm, test_input_norm, test_output_norm)
-            time.sleep(2)
-            question = continue_or_not()
-            if question == 0:
-                break
-            if question == 2:
-                train_choose = 10
 
         elif train_choose == '2':
             train_data, test_data, aux_test_data = mlp_titanic.load_data()
@@ -214,23 +203,38 @@ def main ():
             time.sleep(2)
             break
 
-        elif question == 2:
-            print()
+        while train_choose == '1':
+            numb_neur, func, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm = ml_parameters()
+            acc,ml_model = mlp_titanic.train_model(numb_neur, func, solver,train_input_norm,
+                                   train_output_norm, test_input_norm, test_output_norm)
+            print("The accuracy for the model was: ",round(acc*100,2),"%")
+            time.sleep(2)
+            question = continue_or_not()
+            if question == 0:
+                break
+            if question == 2:
+                train_choose = 10
+
+
         else:
             print('The value typed must be 0 or 1, try again:' )
             time.sleep(5)
 
+    while True:
+        inputs = user_inputs()
 
-    inputs = user_inputs()
+        V_Rede = ml_model.predict(inputs)
 
-    print(inputs)
-
-    V_Rede = ml_model.predict(inputs)
-
-    if V_Rede[0]==1:
-        print("O resultado da rede é: Sobreviveu")
-    else:
-        print("O resultado da rede é: Morreu")
-
+        if V_Rede[0]==1:
+            print("O resultado da rede é: Sobreviveu\n")
+        else:
+            print("O resultado da rede é: Morreu\n")
+        time.sleep(2)
+        new_inputs=input("Would you like to try new inputs?\nType 0 - Yes\nType 1 - No\nType")
+        if new_inputs == 0:
+            time.sleep(0)
+        elif new_inputs == 1
+            break
+    print("End of code")
 if __name__ == '__main__':
     main()
