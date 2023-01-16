@@ -15,12 +15,6 @@ def load_data():
     aux_test_data = pd.read_csv("data/gender_submission.csv")
     return train_data, test_data, aux_test_data
 
-
-
-
-
-
-
 def treat_data(data):
 
     # Data cleaning
@@ -130,6 +124,7 @@ def main():
     # As the test information about Survived were in another csv, it was necessary to concatenate the rows of these two documents.
     test_data = pd.concat([test_data, aux_test_data], axis=1)
 
+    # Getting the train and test data normalized
     train_output_norm, train_input_norm = treat_data(train_data)
     test_output_norm, test_input_norm = treat_data(test_data)
 
@@ -172,10 +167,10 @@ def main():
                     best_model = model
 
     # Prints about the informations of the best parameters
-    print("A melhor acurácia foi: ", round(best_accuracy*100,2), "%")
-    print("A função de ativação que obteve melhor resultado foi: ", best_function)
-    print("O otimizador de peso que obteve melhor resultado foi: ", best_solver)
-    print("A quantidade de neuronios na camada escondida que obteve melhor resultado foi: ", best_number_neurons + 1)
+    print("The best accuracy is: ", round(best_accuracy * 100, 2), "%")
+    print("The activation function that obtained the best result is: ", best_function)
+    print("The weight optimizer that obtained the best result is: ", best_solver)
+    print("The number of neurons in the hidden layer that obtained the best result is: ", best_number_neurons + 1)
     return best_model
 
 if __name__ == '__main__':
