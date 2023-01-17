@@ -3,7 +3,16 @@ import numpy as np
 import mlp_titanic
 import warnings
 import time
+from fastapi import FastAPI
 warnings.filterwarnings("ignore", category=Warning)
+
+app = FastAPI()
+
+
+@app.get('/')
+def teste():
+    return 'oi'
+
 
 def is_float(string):
 
@@ -188,6 +197,7 @@ def user_inputs():
     # Creating a list that stores the values entered by the user
     input_values = [float(message[5]), float(message[4]), float(message[0]), float(message[1]), float(message[2]), float(message[3]), float(message[6])]
     input_values = np.array(input_values).reshape(1, -1)
+
     return input_values
 
 def user_model_choose():
@@ -275,4 +285,5 @@ def main ():
 
 
 if __name__ == '__main__':
+
     main()
