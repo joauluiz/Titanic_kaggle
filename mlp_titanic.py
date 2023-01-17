@@ -90,13 +90,13 @@ def train_model(number_neurons, function, solver, train_input_norm, train_output
                             return_estimator=True)
 
     # Obtaining the scores of the models created by k-fold Cross-Validation
-    scores = (scores['train_score'][:])
+    score = (scores['train_score'][:])
 
     # Obtaining the models created by k-fold Cross-Validation
     model = scores['estimator'][:]
 
     # Getting the index that obtained the best score
-    max_index = np.argmax(scores)
+    max_index = np.argmax(score)
 
     # Best model
     best_model = model[max_index]
@@ -171,7 +171,7 @@ def main():
     print("The activation function that obtained the best result is: ", best_function)
     print("The weight optimizer that obtained the best result is: ", best_solver)
     print("The number of neurons in the hidden layer that obtained the best result is: ", best_number_neurons + 1)
-    return best_model
+    return best_accuracy, best_model
 
 if __name__ == '__main__':
     main()

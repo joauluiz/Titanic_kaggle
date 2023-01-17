@@ -124,63 +124,68 @@ def user_inputs():
             message[i] = input("Enter values for the fare paid by the passenger: ")
             msg = "Enter values for the fare paid by the passenger: "
 
-        #Sempre entrará neste loop para confirmar que o valor digitado faz sentido, para esse loop sempre irá naalisar se apenas o valor é um INT
+        #This loop will always enter to confirm that the entered value makes sense, for this loop will always analyze if the value is only an INT
         while True:
 
-          #Verificando se o valor é um número inteiro pela função isdigit()
-          if is_float(message[i]):
-            break
+            # Checking if the value is an integer number by the isdigit() function
+            if is_float(message[i]):
+                break
 
-          else:
-            # Caso o valor não for um número inteiro, informa o erro e solicita novamente o input
-            print("O valor deve ser um número, sendo o separador decimal o ponto '.'. Tente novamente.")
-                    #Solicitando novamento o valor
-            message[i] = input(msg)
-
-    while True:
-      message[4] = input("Digite os valores para o Sexo (0 masculino e 1 feminino): ")
-      #Verificando se o valor é um número inteiro pela função isdigit()
-      if message[4].isdigit():
-        if message[4] in ['0', '1']:
-            break
-        else:
-          print("O valor deve ser 0 ou 1. Tente novamente.")
-      else:
-        #Caso o valor não for um número inteiro, informa o erro e solicita novamente o input
-        print("O valor deve ser um número inteiro. Tente novamente.")
+            else:
+                # If the value is not an integer number, inform the error and request the input again
+                print("The value must be a number, with the decimal separator being the point '.'. Try again.")
+                # Requesting the value again
+                message[i] = input(msg)
 
     while True:
-      message[5] = input("Digite o valor para a classe socioeconômica do passageiro (1 = primeira classe, 2 = segunda classe, 3 = terceira classe): ")
-      #Verificando se o valor é um número inteiro pela função isdigit()
-      if message[5].isdigit():
-        if message[5] in ['1', '2', '3']:
-            break
+        message[4] = input("Enter the values for the Sex (0 male and 1 female): ")
+        # Checking if the value is an integer number by the isdigit() function
+        if message[4].isdigit():
+            if message[4] in ['0', '1']:
+                break
+            else:
+                print("The value must be 0 or 1. Try again.")
         else:
-          print("O valor deve ser 1, 2 ou 3. Tente novamente.")
-      else:
-        #Caso o valor não for um número inteiro, informa o erro e solicita novamente o input
-        print("O valor deve ser um número inteiro. Tente novamente.")
+            # If the value is not an integer number, inform the error and request the input again
+            print("The value must be an integer number. Try again.")
 
     while True:
-      message[6] = input("Digite os valores para o o porto de embarque do passageiro (C = Cherbourg, Q = Queenstown, S = Southampton): ")
-      #Verificando se o valor é uma letra pelo meétodo isalpha()
-      if message[6].isalpha():
-        if message[6] == "C" or message[6] == "c":
-            message[6]=1
-            break
-        elif message[6] == "Q" or message[6] == "q":
-            message[6] = 2
-            break
-        elif message[6] == "S" or message[6] == "s":
-            message[6] = 3
-            break
+        message[5] = input("Enter the value for the passenger's socioeconomic class (1 = first class, 2 = second class, 3 = third class): ")
+        # Checking if the value is an integer number by the isdigit() function
+        if message[5].isdigit():
+            if message[5] in ['1', '2', '3']:
+                break
+            else:
+                print("The value must be 1, 2 or 3. Try again.")
         else:
-            print("O valor deve ser C, Q ou S. Tente novamente.")
-      else:
-        #Caso o valor não for um número inteiro, informa o erro e solicita novamente o input
-        print("O valor deve ser uma Letra. Tente novamente.")
+            # If the value is not an integer, inform the error and request the input again
+            print("The value must be an integer. Try again.")
 
-    #Criando uma lista na qual armazena os valores digitados pelo usuário
+    while True:
+        message[6] = input("Enter the values for the passenger's port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton): ")
+
+        # Checking if the value is a letter by the method isalpha()
+        if message[6].isalpha():
+
+            if message[6] == "C" or message[6] == "c":
+                message[6] = 1
+                break
+
+            elif message[6] == "Q" or message[6] == "q":
+                message[6] = 2
+                break
+
+            elif message[6] == "S" or message[6] == "s":
+                message[6] = 3
+                break
+
+            else:
+                print("The value must be C, Q or S. Try again.")
+        else:
+            # If the value is not an integer, inform the error and request the input again
+            print("The value must be a letter. Try again.")
+
+    # Creating a list that stores the values entered by the user
     input_values = [float(message[5]), float(message[4]), float(message[0]), float(message[1]), float(message[2]), float(message[3]), float(message[6])]
     input_values = np.array(input_values).reshape(1, -1)
     return input_values
@@ -191,11 +196,11 @@ def user_model_choose():
         print('Would you like to train the machine learning model to find the best parameters? (Type: 0)')
         print('Would you like to define the parameters to analyze the accuracy? (Type: 1)')
         print('Would you like to use the previous best parameters of the model (96 % accuracy)? (Type: 2)')
-        train_choose = input('type:')
+        train_choose = input('Type:')
 
         # trazer para lower case tudo
         if train_choose == '0':
-            model = mlp_titanic.main()
+            acc, model = mlp_titanic.main()
             time.sleep(2)
             break
 
@@ -262,8 +267,10 @@ def main ():
 
         if new_inputs == '0':
             time.sleep(0)
+
         elif new_inputs == '1':
             break
+
     print("\nEnd of code")
 
 
