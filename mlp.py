@@ -5,6 +5,10 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import cross_validate
 from sklearn.metrics import accuracy_score
 import warnings
+
+from entities.model_parameters import Model_Parameters
+from enums.molder_solver import Model_Solver
+
 warnings.filterwarnings("ignore", category=Warning)
 from IPython.display import clear_output
 
@@ -71,20 +75,20 @@ def treat_data(data):
 
     return output_norm, input_norm
 
-def train_model(number_neurons, function, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm):
+def train_model(parameters: Model_Parameters):
 
     # Creating the neural network mode
-    multilayer_perceptron_classifier = MLPClassifier(hidden_layer_sizes=(number_neurons + 1),
+    multilayer_perceptron_classifier = MLPClassifier(hidden_layer_sizes=(parameters.number_neurons + 1),
                                                      max_iter=10000,
                                                      learning_rate_init=0.005,
                                                      validation_fraction=0.15,
-                                                     activation=function,
-                                                     solver=solver,
+                                                     activation=parameters.function,
+                                                     solver=parameters.solver,
                                                      tol=1e-4,
                                                      random_state=1)
 
     # Performing k-fold Cross-Validation with k=5 to evaluate which model has the best result and will be used for the subsequent test phase
-    scores = cross_validate(multilayer_perceptron_classifier, train_input_norm, train_output_norm.ravel(), cv=5,
+    scores = cross_validate(multilayer_perceptron_classifier, parameters.train_input_norm, parameters.train_output_norm.ravel(), cv=5,
                             scoring=('accuracy'),
                             return_train_score=True,
                             return_estimator=True)
@@ -102,19 +106,19 @@ def train_model(number_neurons, function, solver, train_input_norm, train_output
     best_model = model[max_index]
 
     # Calculating the network's responses
-    output_model = model[max_index].predict(test_input_norm).reshape(-1, 1)
+    output_model = model[max_index].predict(parameters.test_input_norm).reshape(-1, 1)
 
     # Denormalizing the data so that the values can return to 0 and 1 and thus make the comparison with the expected values
-    output_model = MinMaxScaler(feature_range=(test_output_norm.min(), test_output_norm.max())).fit(
+    output_model = MinMaxScaler(feature_range=(parameters.test_output_norm.min(), parameters.test_output_norm.max())).fit(
         output_model).transform(output_model)
 
     # Accuracy calculation, comparing the desired values with the actual values
-    acc = accuracy_score(test_output_norm, output_model)
+    acc = accuracy_score(parameters.test_output_norm, output_model)
 
     return acc, best_model
 
 
-def main():
+def retrieve_best_parameters():
 
     # Reading the training data
     train_data, test_data, aux_test_data = load_data()
@@ -134,26 +138,36 @@ def main():
     k=0
     for i in range(3):
         if (i == 0):
-            func = "tanh"
+            func = "tanh" #todo
         elif (i == 1):
-            func = "logistic"
+            func = "logistic" #todo
         elif (i == 2):
-            func = "relu"
+            func = "relu" #todo
 
         # Loop for changing the weights optimizers
         for j in range(3):
             if (j == 0):
-                solver = "lbfgs"
+                solver = Model_Solver.LBFGS
             elif (j == 1):
-                solver = "sgd"
+                solver = Model_Solver.SGD
             elif (j == 2):
-                solver = "adam"
+                solver = Model_Solver.ADAM
 
             # Resetting the number of neurons, as the activation functions and optimizers are being swapped.
             for numb_neur in range(5):
                 k=k+1
-                accuracy, model = train_model(numb_neur, func, solver, train_input_norm, train_output_norm,
-                                  test_input_norm, test_output_norm)
+
+                parameters = Model_Parameters()
+                parameters.number_neurons = numb_neur
+                parameters.function = func #todo investigar
+                parameters.solver = solver #todo investigar
+                parameters.train_input_norm = train_input_norm
+                parameters.train_output_norm = train_output_norm
+                parameters.test_input_norm = test_input_norm
+                parameters.test_output_norm = test_output_norm
+
+
+                accuracy, model = train_model(parameters)
 
                 #Enter in this if only if the current accuracy is higher than the best accuracy
                 if (accuracy > best_accuracy):
@@ -173,5 +187,3 @@ def main():
     print("The number of neurons in the hidden layer that obtained the best result is: ", best_number_neurons + 1)
     return best_accuracy, best_model
 
-if __name__ == '__main__':
-    main()
