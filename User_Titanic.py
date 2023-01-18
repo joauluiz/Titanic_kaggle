@@ -6,13 +6,6 @@ import time
 from fastapi import FastAPI
 warnings.filterwarnings("ignore", category=Warning)
 
-app = FastAPI()
-
-
-@app.get('/')
-def teste():
-    return 'oi'
-
 
 def is_float(string):
 
@@ -267,10 +260,11 @@ def main ():
 
         if output_model[0]==1:
             print("The model result is: Survived\n")
+            teste="The model result is: Survived"
 
         else:
             print("The model result is: Died\n")
-
+            teste = "The model result is: Died"
         time.sleep(2)
 
         new_inputs=input("Would you like to try new inputs?\nType 0 - Yes\nType 1 - No\nType: ")
@@ -282,8 +276,21 @@ def main ():
             break
 
     print("\nEnd of code")
+    return teste
 
+app = FastAPI()
+
+@app.get('/')
+def teste():
+    teste2 = main()
+    return teste2
 
 if __name__ == '__main__':
 
     main()
+
+
+
+
+
+
