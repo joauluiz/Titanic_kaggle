@@ -6,7 +6,9 @@ import time
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+from enums.message_error import Message_Error
 from enums.train_choice import Train_Choice
+from enums.message_inputs import Message_Inputs
 
 warnings.filterwarnings("ignore", category=Warning)
 
@@ -58,7 +60,7 @@ def number_int_positive (message):
         if is_int(question) and int(question)>0:
             break
         else:
-            print('The number must be positive and integer')
+            print(Message_Error.POSITIVE_INTEGER)
             time.sleep(5)
     return question
 
@@ -69,40 +71,40 @@ def number_float_positive(message):
         if is_float(question) and float(question)>0:
             break
         else:
-            print('The number must be positive and float')
+            print(Message_Error.POSITIVE_FLOAT)
             time.sleep(5)
     return question
 
 def model_function():
 
     while True:
-        question = input('Choose an active function: relu, logistic or tanh: ')
+        question = input(Message_Inputs.ACTIVE_FUNCTION)
         if question == 'relu' or question == 'logistic' or  question == 'tanh':
             break
         else:
-            print('Wrong active function, must be one of the three.')
+            print(Message_Error.ACTIVE_FUNCTION)
             time.sleep(2)
     return question
 
 def model_solver():
 
     while True:
-        question = input('Choose one of the solvers: lbfgs, sgd or adam: ')
+        question = input(Message_Inputs.SOLVER)
         if question == 'lbfgs' or question == 'sgd' or  question == 'adam':
             break
         else:
-            print('Wrong solver, must be one of the three.')
+            print(Message_Error.SOLVER)
             time.sleep(2)
     return question
 
 def model_neurons():
 
     while True:
-        question = input('Please, type the number of neurons in the hidden layer:')
+        question = input(Message_Inputs.NUMBER_NEURONS)
         if is_int(question) and int(question) > 0:
             break
         else:
-            print('The number must be positive and integer')
+            print(Message_Error.POSITIVE_INTEGER)
             time.sleep(2)
     return int(question)
 
@@ -132,7 +134,7 @@ def continue_or_not():
             break
 
         else:
-            print('Wrong value, please try again: ')
+            print(Message_Error.WRONG_VALUE)
             time.sleep(5)
 
     return int(question)
@@ -142,17 +144,17 @@ def user_inputs():
     # Fazendo um loop para garantir que as informações colocadas são número inteiros. Neste caso não estou limitando os valores
     for i in range (4):
         if (i==0):
-            message[i] = input("\nEnter values for Age: ")
-            msg = "Enter values for Age: "
+            message[i] = input(Message_Inputs.AGE)
+            msg = Message_Inputs.AGE
         elif (i == 1):
-            message[i] = input("Enter values for the number of siblings/spouses of the passenger on board: ")
-            msg = "Enter values for the number of siblings/spouses of the passenger on board: "
+            message[i] = input(Message_Inputs.SIBLINGS_SPOUSES)
+            msg = Message_Inputs.SIBLINGS_SPOUSES
         elif i == 2:
-            message[i] = input("Enter values for the number of parents/children of the passenger on board: ")
-            msg = "Enter values for the number of parents/children of the passenger on board: "
+            message[i] = input(Message_Inputs.PARENTS_CHILDREN)
+            msg = Message_Inputs.PARENTS_CHILDREN
         elif (i == 3):
-            message[i] = input("Enter values for the fare paid by the passenger: ")
-            msg = "Enter values for the fare paid by the passenger: "
+            message[i] = input(Message_Inputs.FARE_PAID)
+            msg = Message_Inputs.FARE_PAID
 
         #This loop will always enter to confirm that the entered value makes sense, for this loop will always analyze if the value is only an INT
         while True:
@@ -163,36 +165,36 @@ def user_inputs():
 
             else:
                 # If the value is not an integer number, inform the error and request the input again
-                print("The value must be a number, with the decimal separator being the point '.'. Try again.")
+                print(Message_Error.DECIMAL_NUMBER)
                 # Requesting the value again
                 message[i] = input(msg)
 
     while True:
-        message[4] = input("Enter the values for the Sex (0 male and 1 female): ")
+        message[4] = input(Message_Inputs.SEX)
         # Checking if the value is an integer number by the isdigit() function
         if message[4].isdigit():
             if message[4] in ['0', '1']:
                 break
             else:
-                print("The value must be 0 or 1. Try again.")
+                print(Message_Error.ZERO_OR_ONE)
         else:
-            # If the value is not an integer number, inform the error and request the input again
-            print("The value must be an integer number. Try again.")
+            # If the value is not an integer, inform the error and request the input again
+            print(Message_Error.INTEGER)
 
     while True:
-        message[5] = input("Enter the value for the passenger's socioeconomic class (1 = first class, 2 = second class, 3 = third class): ")
+        message[5] = input(Message_Inputs.SOCIECONOMIC_CLASS)
         # Checking if the value is an integer number by the isdigit() function
         if message[5].isdigit():
             if message[5] in ['1', '2', '3']:
                 break
             else:
-                print("The value must be 1, 2 or 3. Try again.")
+                print(Message_Error.ONE_TWO_OR_THREE)
         else:
             # If the value is not an integer, inform the error and request the input again
-            print("The value must be an integer. Try again.")
+            print(Message_Error.INTEGER)
 
     while True:
-        message[6] = input("Enter the values for the passenger's port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton): ")
+        message[6] = input(Message_Inputs.PORT_EMBARKATION)
 
         # Checking if the value is a letter by the method isalpha()
         if message[6].isalpha():
@@ -210,10 +212,10 @@ def user_inputs():
                 break
 
             else:
-                print("The value must be C, Q or S. Try again.")
+                print(Message_Error.C_Q_S)
         else:
             # If the value is not an integer, inform the error and request the input again
-            print("The value must be a letter. Try again.")
+            print(Message_Error.LETTER)
 
     # Creating a list that stores the values entered by the user
     input_values = [float(message[5]), float(message[4]), float(message[0]), float(message[1]), float(message[2]), float(message[3]), float(message[6])]
@@ -224,9 +226,9 @@ def user_inputs():
 def user_model_choose():
     while True:
         print('\nChoose one of the options:')
-        print('Would you like to train the machine learning model to find the best parameters? (Type: 0)')
-        print('Would you like to define the parameters to analyze the accuracy? (Type: 1)')
-        print('Would you like to use the previous best parameters of the model (96 % accuracy)? (Type: 2)')
+        print(Message_Inputs.BEST_PARAMETERS)
+        print(Message_Inputs.DEFINE_PARAMETERS)
+        print(Message_Inputs.PREVIOUS_BEST_PARAMETERS)
         train_choice_input = input('Type:')
 
         # trazer para lower case tudo
@@ -273,7 +275,7 @@ def user_model_choose():
             pass
 
         else:
-            print('The value typed must be 0 or 1, try again:')
+            print(Message_Error.ZERO_OR_ONE)
             time.sleep(5)
 
     return acc, model
