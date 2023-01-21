@@ -15,5 +15,9 @@ class Message_Inputs (Enum):
     NUMBER_NEURONS = 'Please, type the number of neurons in the hidden layer:'
     SOLVER = 'Choose one of the solvers: lbfgs, sgd or adam: '
     ACTIVE_FUNCTION = 'Choose an active function: relu, logistic or tanh: '
+    CONTINUE_PREDICT = 'Do you want go ahead and predict with your own values? (type 0)'
+    TEST_OTHER_PARAMETERS = 'Do you want to test other parameters? (type 1)'
+    PREVIOUS_OPTIONS = 'Do you want go back to the previous options? (Type 2)'
+
 
 

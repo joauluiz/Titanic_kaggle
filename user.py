@@ -124,9 +124,9 @@ def model_parameters():
 def continue_or_not():
 
     while True:
-        print('Do you want go ahead and predict with your own values? (type 0)')
-        print('Do you want to test other parameters? (type 1)')
-        print('Do you want go back to the previous options? (Type 2)')
+        print(Message_Inputs.CONTINUE_PREDICT)
+        print(Message_Inputs.TEST_OTHER_PARAMETERS)
+        print(Message_Inputs.PREVIOUS_OPTIONS)
 
         question = input ('Type:')
 
