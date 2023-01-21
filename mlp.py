@@ -173,7 +173,7 @@ def retrieve_best_parameters():
 
                 #Enter in this if only if the current accuracy is higher than the best accuracy
                 if (accuracy > best_accuracy):
-                    print(Messages.BEST_ACCURACY_SO_FAR,round(accuracy * 100, 2), "%")
+                    print(Message_Best.ACCURACY_SO_FAR,round(accuracy * 100, 2), "%")
                     print(Messages.RUNNING_MODELS)
                     print(Messages.ITERATIONS, k)
                     best_function = func
@@ -183,10 +183,10 @@ def retrieve_best_parameters():
                     best_model = model
 
     # Prints about the informations of the best parameters
-    print(Message_Best.BEST_ACCURACY, round(best_accuracy * 100, 2), "%")
-    print(Message_Best.BEST_FUNCTION, best_function)
-    print(Message_Best.BEST_ANSWER, best_solver)
-    print(Message_Best.BEST_NUMBER_NEURONS, best_number_neurons + 1)
+    print(Message_Best.ACCURACY, round(best_accuracy * 100, 2), "%")
+    print(Message_Best.FUNCTION, best_function)
+    print(Message_Best.ANSWER, best_solver)
+    print(Message_Best.NUMBER_NEURONS, best_number_neurons + 1)
     return best_accuracy, best_model
 
 
