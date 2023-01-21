@@ -7,6 +7,8 @@ from sklearn.metrics import accuracy_score
 import warnings
 
 from entities.model_parameters import Model_Parameters
+from enums.message_answer import Message_Answer, Message_Best, Messages
+from enums.model_function import Model_Function
 from enums.molder_solver import Model_Solver
 
 warnings.filterwarnings("ignore", category=Warning)
@@ -138,11 +140,11 @@ def retrieve_best_parameters():
     k=0
     for i in range(3):
         if (i == 0):
-            func = "tanh" #todo
+            func = Model_Function.TANH
         elif (i == 1):
-            func = "logistic" #todo
+            func = Model_Function.LOGISTIC
         elif (i == 2):
-            func = "relu" #todo
+            func = Model_Function.RELU
 
         # Loop for changing the weights optimizers
         for j in range(3):
@@ -171,9 +173,9 @@ def retrieve_best_parameters():
 
                 #Enter in this if only if the current accuracy is higher than the best accuracy
                 if (accuracy > best_accuracy):
-                    print("\nThe best accuracy found so far is: ",round(accuracy * 100, 2), "%")
-                    print("The models are still being tested")
-                    print("Number of iterations so far:", k)
+                    print(Messages.BEST_ACCURACY_SO_FAR,round(accuracy * 100, 2), "%")
+                    print(Messages.RUNNING_MODELS)
+                    print(Messages.ITERATIONS, k)
                     best_function = func
                     best_solver = solver
                     best_number_neurons = numb_neur
@@ -181,9 +183,10 @@ def retrieve_best_parameters():
                     best_model = model
 
     # Prints about the informations of the best parameters
-    print("The best accuracy is: ", round(best_accuracy * 100, 2), "%")
-    print("The activation function that obtained the best result is: ", best_function)
-    print("The weight optimizer that obtained the best result is: ", best_solver)
-    print("The number of neurons in the hidden layer that obtained the best result is: ", best_number_neurons + 1)
+    print(Message_Best.BEST_ACCURACY, round(best_accuracy * 100, 2), "%")
+    print(Message_Best.BEST_FUNCTION, best_function)
+    print(Message_Best.BEST_ANSWER, best_solver)
+    print(Message_Best.BEST_NUMBER_NEURONS, best_number_neurons + 1)
     return best_accuracy, best_model
+
 
