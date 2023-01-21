@@ -7,7 +7,7 @@ from sklearn.metrics import accuracy_score
 import warnings
 
 from entities.model_parameters import Model_Parameters
-from enums.message_answer import Message_Answer, Message_Best, Messages
+from enums.message_answer import Message_Best, Messages
 from enums.model_function import Model_Function
 from enums.molder_solver import Model_Solver
 
@@ -21,8 +21,8 @@ def load_data():
     aux_test_data = pd.read_csv("data/gender_submission.csv")
     return train_data, test_data, aux_test_data
 
-def treat_data(data):
 
+def treat_data(data):
     # Data cleaning
     # Excluding empty rows of the dataset when there is missing data in at least 1 column
     data = data[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Survived']].dropna()
@@ -60,7 +60,8 @@ def treat_data(data):
     input_columns.loc[mask, "Sex"] = 1
 
     # If by chance there is any value other than S, Q, and C, delete the rows (This serves for a hypothetical case in which information is added improperly)
-    mask = input_columns.loc[(input_columns["Embarked"] != "C") & (input_columns["Embarked"] != "Q") & (input_columns["Embarked"] != "S")]
+    mask = input_columns.loc[
+        (input_columns["Embarked"] != "C") & (input_columns["Embarked"] != "Q") & (input_columns["Embarked"] != "S")]
     input_columns = input_columns.drop(mask.index)
 
     # Changing the values from embarkation points, C=1, Q=2 e S=3 so then they can be used by the neural network model
@@ -77,8 +78,8 @@ def treat_data(data):
 
     return output_norm, input_norm
 
-def train_model(parameters: Model_Parameters):
 
+def train_model(parameters: Model_Parameters):
     # Creating the neural network mode
     multilayer_perceptron_classifier = MLPClassifier(hidden_layer_sizes=(parameters.number_neurons + 1),
                                                      max_iter=10000,
@@ -90,7 +91,8 @@ def train_model(parameters: Model_Parameters):
                                                      random_state=1)
 
     # Performing k-fold Cross-Validation with k=5 to evaluate which model has the best result and will be used for the subsequent test phase
-    scores = cross_validate(multilayer_perceptron_classifier, parameters.train_input_norm, parameters.train_output_norm.ravel(), cv=5,
+    scores = cross_validate(multilayer_perceptron_classifier, parameters.train_input_norm,
+                            parameters.train_output_norm.ravel(), cv=5,
                             scoring=('accuracy'),
                             return_train_score=True,
                             return_estimator=True)
@@ -111,7 +113,8 @@ def train_model(parameters: Model_Parameters):
     output_model = model[max_index].predict(parameters.test_input_norm).reshape(-1, 1)
 
     # Denormalizing the data so that the values can return to 0 and 1 and thus make the comparison with the expected values
-    output_model = MinMaxScaler(feature_range=(parameters.test_output_norm.min(), parameters.test_output_norm.max())).fit(
+    output_model = MinMaxScaler(
+        feature_range=(parameters.test_output_norm.min(), parameters.test_output_norm.max())).fit(
         output_model).transform(output_model)
 
     # Accuracy calculation, comparing the desired values with the actual values
@@ -121,7 +124,6 @@ def train_model(parameters: Model_Parameters):
 
 
 def retrieve_best_parameters():
-
     # Reading the training data
     train_data, test_data, aux_test_data = load_data()
 
@@ -136,57 +138,48 @@ def retrieve_best_parameters():
 
     best_accuracy = 0
 
-    #Creating a loop so I can verify what parameters have the accuracy
-    k=0
+    # Creating a loop so I can verify what parameters have the accuracy
+    k = 0
     for i in range(3):
         if (i == 0):
-            func = Model_Function.TANH
+            func = Model_Function.TANH.value
         elif (i == 1):
-            func = Model_Function.LOGISTIC
+            func = Model_Function.LOGISTIC.value
         elif (i == 2):
-            func = Model_Function.RELU
+            func = Model_Function.RELU.value
 
         # Loop for changing the weights optimizers
         for j in range(3):
             if (j == 0):
-                solver = Model_Solver.LBFGS
+                solver = Model_Solver.LBFGS.value
             elif (j == 1):
-                solver = Model_Solver.SGD
+                solver = Model_Solver.SGD.value
             elif (j == 2):
-                solver = Model_Solver.ADAM
+                solver = Model_Solver.ADAM.value
 
             # Resetting the number of neurons, as the activation functions and optimizers are being swapped.
             for numb_neur in range(5):
-                k=k+1
 
-                parameters = Model_Parameters()
-                parameters.number_neurons = numb_neur
-                parameters.function = func #todo investigar
-                parameters.solver = solver #todo investigar
-                parameters.train_input_norm = train_input_norm
-                parameters.train_output_norm = train_output_norm
-                parameters.test_input_norm = test_input_norm
-                parameters.test_output_norm = test_output_norm
+                k = k + 1
 
+                parameters = Model_Parameters(numb_neur, func, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm)
 
                 accuracy, model = train_model(parameters)
 
-                #Enter in this if only if the current accuracy is higher than the best accuracy
-                if (accuracy > best_accuracy):
-                    print(Message_Best.ACCURACY_SO_FAR,round(accuracy * 100, 2), "%")
-                    print(Messages.RUNNING_MODELS)
-                    print(Messages.ITERATIONS, k)
-                    best_function = func
+                # Enter in this if only if the current accuracy is higher than the best accuracy
+                if accuracy > best_accuracy:
+                    print(Message_Best.ACCURACY_SO_FAR.value, round(accuracy * 100, 2), "%")
+                    print(Messages.RUNNING_MODELS.value)
+                    print(Messages.ITERATIONS.value, k)
+                    best_function = parameters.func
                     best_solver = solver
                     best_number_neurons = numb_neur
                     best_accuracy = accuracy
                     best_model = model
 
     # Prints about the informations of the best parameters
-    print(Message_Best.ACCURACY, round(best_accuracy * 100, 2), "%")
-    print(Message_Best.FUNCTION, best_function)
-    print(Message_Best.ANSWER, best_solver)
-    print(Message_Best.NUMBER_NEURONS, best_number_neurons + 1)
+    print(Message_Best.ACCURACY.value, round(best_accuracy * 100, 2), "%")
+    print(Message_Best.FUNCTION.value, best_function)
+    print(Message_Best.SOLVER.value, best_solver)
+    print(Message_Best.NUMBER_NEURONS.value, best_number_neurons + 1)
     return best_accuracy, best_model
-
-

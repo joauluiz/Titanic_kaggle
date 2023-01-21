@@ -7,6 +7,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 from enums.message_error import Message_Error
+from enums.model_function import Model_Function
+from enums.molder_solver import Model_Solver
 from enums.train_choice import Train_Choice
 from enums.message_inputs import Message_Inputs
 
@@ -60,7 +62,7 @@ def number_int_positive (message):
         if is_int(question) and int(question)>0:
             break
         else:
-            print(Message_Error.POSITIVE_INTEGER)
+            print(Message_Error.POSITIVE_INTEGER.value)
             time.sleep(5)
     return question
 
@@ -71,40 +73,40 @@ def number_float_positive(message):
         if is_float(question) and float(question)>0:
             break
         else:
-            print(Message_Error.POSITIVE_FLOAT)
+            print(Message_Error.POSITIVE_FLOAT.value)
             time.sleep(5)
     return question
 
 def model_function():
 
     while True:
-        question = input(Message_Inputs.ACTIVE_FUNCTION)
+        question = input(Message_Inputs.ACTIVE_FUNCTION.value)
         if question == 'relu' or question == 'logistic' or  question == 'tanh':
             break
         else:
-            print(Message_Error.ACTIVE_FUNCTION)
+            print(Message_Error.ACTIVE_FUNCTION.value)
             time.sleep(2)
     return question
 
 def model_solver():
 
     while True:
-        question = input(Message_Inputs.SOLVER)
+        question = input(Message_Inputs.SOLVER.value)
         if question == 'lbfgs' or question == 'sgd' or  question == 'adam':
             break
         else:
-            print(Message_Error.SOLVER)
+            print(Message_Error.SOLVER.value)
             time.sleep(2)
     return question
 
 def model_neurons():
 
     while True:
-        question = input(Message_Inputs.NUMBER_NEURONS)
+        question = input(Message_Inputs.NUMBER_NEURONS.value)
         if is_int(question) and int(question) > 0:
             break
         else:
-            print(Message_Error.POSITIVE_INTEGER)
+            print(Message_Error.POSITIVE_INTEGER.value)
             time.sleep(2)
     return int(question)
 
@@ -124,9 +126,9 @@ def model_parameters():
 def continue_or_not():
 
     while True:
-        print(Message_Inputs.CONTINUE_PREDICT)
-        print(Message_Inputs.TEST_OTHER_PARAMETERS)
-        print(Message_Inputs.PREVIOUS_OPTIONS)
+        print(Message_Inputs.CONTINUE_PREDICT.value)
+        print(Message_Inputs.TEST_OTHER_PARAMETERS.value)
+        print(Message_Inputs.PREVIOUS_OPTIONS.value)
 
         question = input ('Type:')
 
@@ -134,7 +136,7 @@ def continue_or_not():
             break
 
         else:
-            print(Message_Error.WRONG_VALUE)
+            print(Message_Error.WRONG_VALUE.value)
             time.sleep(5)
 
     return int(question)
@@ -144,17 +146,17 @@ def user_inputs():
     # Fazendo um loop para garantir que as informações colocadas são número inteiros. Neste caso não estou limitando os valores
     for i in range (4):
         if (i==0):
-            message[i] = input(Message_Inputs.AGE)
-            msg = Message_Inputs.AGE
+            message[i] = input(Message_Inputs.AGE.value)
+            msg = Message_Inputs.AGE.value
         elif (i == 1):
-            message[i] = input(Message_Inputs.SIBLINGS_SPOUSES)
-            msg = Message_Inputs.SIBLINGS_SPOUSES
+            message[i] = input(Message_Inputs.SIBLINGS_SPOUSES.value)
+            msg = Message_Inputs.SIBLINGS_SPOUSES.value
         elif i == 2:
-            message[i] = input(Message_Inputs.PARENTS_CHILDREN)
-            msg = Message_Inputs.PARENTS_CHILDREN
+            message[i] = input(Message_Inputs.PARENTS_CHILDREN.value)
+            msg = Message_Inputs.PARENTS_CHILDREN.value
         elif (i == 3):
-            message[i] = input(Message_Inputs.FARE_PAID)
-            msg = Message_Inputs.FARE_PAID
+            message[i] = input(Message_Inputs.FARE_PAID.value)
+            msg = Message_Inputs.FARE_PAID.value
 
         #This loop will always enter to confirm that the entered value makes sense, for this loop will always analyze if the value is only an INT
         while True:
@@ -165,36 +167,36 @@ def user_inputs():
 
             else:
                 # If the value is not an integer number, inform the error and request the input again
-                print(Message_Error.DECIMAL_NUMBER)
+                print(Message_Error.DECIMAL_NUMBER.value)
                 # Requesting the value again
                 message[i] = input(msg)
 
     while True:
-        message[4] = input(Message_Inputs.SEX)
+        message[4] = input(Message_Inputs.SEX.value)
         # Checking if the value is an integer number by the isdigit() function
         if message[4].isdigit():
             if message[4] in ['0', '1']:
                 break
             else:
-                print(Message_Error.ZERO_OR_ONE)
+                print(Message_Error.ZERO_OR_ONE.value)
         else:
             # If the value is not an integer, inform the error and request the input again
-            print(Message_Error.INTEGER)
+            print(Message_Error.INTEGER.value)
 
     while True:
-        message[5] = input(Message_Inputs.SOCIECONOMIC_CLASS)
+        message[5] = input(Message_Inputs.SOCIECONOMIC_CLASS.value)
         # Checking if the value is an integer number by the isdigit() function
         if message[5].isdigit():
             if message[5] in ['1', '2', '3']:
                 break
             else:
-                print(Message_Error.ONE_TWO_OR_THREE)
+                print(Message_Error.ONE_TWO_OR_THREE.value)
         else:
             # If the value is not an integer, inform the error and request the input again
-            print(Message_Error.INTEGER)
+            print(Message_Error.INTEGER.value)
 
     while True:
-        message[6] = input(Message_Inputs.PORT_EMBARKATION)
+        message[6] = input(Message_Inputs.PORT_EMBARKATION.value)
 
         # Checking if the value is a letter by the method isalpha()
         if message[6].isalpha():
@@ -212,10 +214,10 @@ def user_inputs():
                 break
 
             else:
-                print(Message_Error.C_Q_S)
+                print(Message_Error.C_Q_S.value)
         else:
             # If the value is not an integer, inform the error and request the input again
-            print(Message_Error.LETTER)
+            print(Message_Error.LETTER.value)
 
     # Creating a list that stores the values entered by the user
     input_values = [float(message[5]), float(message[4]), float(message[0]), float(message[1]), float(message[2]), float(message[3]), float(message[6])]
@@ -226,31 +228,31 @@ def user_inputs():
 def user_model_choose():
     while True:
         print('\nChoose one of the options:')
-        print(Message_Inputs.BEST_PARAMETERS)
-        print(Message_Inputs.DEFINE_PARAMETERS)
-        print(Message_Inputs.PREVIOUS_BEST_PARAMETERS)
+        print(Message_Inputs.BEST_PARAMETERS.value)
+        print(Message_Inputs.DEFINE_PARAMETERS.value)
+        print(Message_Inputs.PREVIOUS_BEST_PARAMETERS.value)
         train_choice_input = input('Type:')
 
         # trazer para lower case tudo
-        if train_choice_input == Train_Choice.BEST_PARAMETERS:
+        if train_choice_input == Train_Choice.BEST_PARAMETERS.value:
             acc, model = mlp.retrieve_best_parameters()
             time.sleep(2)
             break
 
-        elif train_choice_input == Train_Choice.PREVIOUS_PARAMETERS:
+        elif train_choice_input == Train_Choice.PREVIOUS_PARAMETERS.value:
             train_data, test_data, aux_test_data = mlp.load_data()
             train_output_norm, train_input_norm = mlp.treat_data(train_data)
             aux_test_data = aux_test_data[["Survived"]]
             test_data = pd.concat([test_data, aux_test_data], axis=1)
             test_output_norm, test_input_norm = mlp.treat_data(test_data)
-            acc, model = mlp.train_model(number_neurons=1, function='relu', solver='sgd',
+            acc, model = mlp.train_model(number_neurons=1, function= Model_Function.RELU, solver=Model_Solver.SGD,
                                                     train_input_norm=train_input_norm, train_output_norm=train_output_norm,
                                                     test_input_norm=test_input_norm,
                                                     test_output_norm=test_output_norm)
             time.sleep(2)
             break
 
-        while train_choice_input == Train_Choice.DEFINE_PARAMETERS:
+        while train_choice_input == Train_Choice.DEFINE_PARAMETERS.value:
             numb_neur, func, solver, train_input_norm, train_output_norm, test_input_norm, test_output_norm = model_parameters()
             acc, model = mlp.train_model(numb_neur, func, solver, train_input_norm,
                                                     train_output_norm, test_input_norm, test_output_norm)
@@ -265,17 +267,17 @@ def user_model_choose():
                 break
 
             if question == 2:
-                train_choice_input = Train_Choice.CONTINUE
+                train_choice_input = Train_Choice.CONTINUE.value
 
-        if train_choice_input == Train_Choice.DEFINE_PARAMETERS:
+        if train_choice_input == Train_Choice.DEFINE_PARAMETERS.value:
             break
 
-        if train_choice_input == Train_Choice.CONTINUE:
+        if train_choice_input == Train_Choice.CONTINUE.value:
             #time.sleep(0)
             pass
 
         else:
-            print(Message_Error.ZERO_OR_ONE)
+            print(Message_Error.ZERO_OR_ONE.value)
             time.sleep(5)
 
     return acc, model
