@@ -125,6 +125,7 @@ def train_model(parameters: Model_Parameters):
 
 def retrieve_best_parameters():
     # Reading the training data
+    global func, solver, best_function, best_solver, best_number_neurons
     train_data, test_data, aux_test_data = load_data()
 
     aux_test_data = aux_test_data[["Survived"]]
@@ -141,20 +142,20 @@ def retrieve_best_parameters():
     # Creating a loop so I can verify what parameters have the accuracy
     k = 0
     for i in range(3):
-        if (i == 0):
+        if i == 0:
             func = Model_Function.TANH.value
-        elif (i == 1):
+        elif i == 1:
             func = Model_Function.LOGISTIC.value
-        elif (i == 2):
+        elif i == 2:
             func = Model_Function.RELU.value
 
         # Loop for changing the weights optimizers
         for j in range(3):
-            if (j == 0):
+            if j == 0:
                 solver = Model_Solver.LBFGS.value
-            elif (j == 1):
+            elif j == 1:
                 solver = Model_Solver.SGD.value
-            elif (j == 2):
+            elif j == 2:
                 solver = Model_Solver.ADAM.value
 
             # Resetting the number of neurons, as the activation functions and optimizers are being swapped.
@@ -171,8 +172,8 @@ def retrieve_best_parameters():
                     print(Message_Best.ACCURACY_SO_FAR.value, round(accuracy * 100, 2), "%")
                     print(Messages.RUNNING_MODELS.value)
                     print(Messages.ITERATIONS.value, k)
-                    best_function = parameters.func
-                    best_solver = solver
+                    best_function = parameters.function
+                    best_solver = parameters.solver
                     best_number_neurons = numb_neur
                     best_accuracy = accuracy
                     best_model = model
@@ -181,5 +182,5 @@ def retrieve_best_parameters():
     print(Message_Best.ACCURACY.value, round(best_accuracy * 100, 2), "%")
     print(Message_Best.FUNCTION.value, best_function)
     print(Message_Best.SOLVER.value, best_solver)
-    print(Message_Best.NUMBER_NEURONS.value, best_number_neurons + 1)
+    print(Message_Best.NUMBER_NEURONS.value, best_number_neurons+1)
     return best_accuracy, best_model

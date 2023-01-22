@@ -2,6 +2,7 @@ from enum import Enum
 
 # class syntax
 class Message_Error (Enum):
+    ACTIVE_FUNCTION = 'Wrong active function, please try again: '
     POSITIVE_INTEGER = 'The number must be positive and integer'
     POSITIVE_FLOAT = 'The number must be positive and float'
     INTEGER = "The value must be an integer. Try again."
