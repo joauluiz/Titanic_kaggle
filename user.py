@@ -5,8 +5,7 @@ import warnings
 import time
 from fastapi import FastAPI
 from pydantic import BaseModel
-from entities.model_inputs import Model_Inputs, input_float_values, input_sex, input_port_embarkation, \
-    input_socieconomic_class
+from entities.model_inputs import Model_Inputs
 from entities.model_parameters import Model_Parameters
 from enums.message_error import Message_Error
 from enums.model_function import Model_Function
@@ -57,6 +56,7 @@ def is_int(string):
     except ValueError:
         return False
 
+
 def training_choice():
     print('\nChoose one of the options:')
     print(Message_Inputs.BEST_PARAMETERS.value)
@@ -64,6 +64,7 @@ def training_choice():
     print(Message_Inputs.PREVIOUS_BEST_PARAMETERS.value)
     train_choice_input = input('Type:')
     return train_choice_input
+
 
 def number_int_positive(message):
     while True:
@@ -75,6 +76,7 @@ def number_int_positive(message):
             time.sleep(5)
     return question
 
+
 def number_float_positive(message):
     while True:
         question = input(message)
@@ -84,6 +86,7 @@ def number_float_positive(message):
             print(Message_Error.POSITIVE_FLOAT.value)
             time.sleep(5)
     return question
+
 
 def model_function():
     while True:
@@ -95,6 +98,7 @@ def model_function():
             time.sleep(2)
     return question
 
+
 def model_solver():
     while True:
         question = input(Message_Inputs.SOLVER.value)
@@ -104,6 +108,7 @@ def model_solver():
             print(Message_Error.SOLVER.value)
             time.sleep(2)
     return question
+
 
 def model_neurons():
     while True:
@@ -115,8 +120,8 @@ def model_neurons():
             time.sleep(2)
     return int(question) - 1
 
-def data_norm():
 
+def data_norm():
     train_data, test_data, aux_test_data = mlp.load_data()
 
     train_output_norm, train_input_norm = mlp.treat_data(train_data)
@@ -129,8 +134,8 @@ def data_norm():
 
     return train_output_norm, train_input_norm, test_output_norm, test_input_norm
 
-def model_parameters():
 
+def model_parameters():
     print('\nChoose the parameters:')
 
     train_data, test_data, aux_test_data = mlp.load_data()
@@ -152,8 +157,8 @@ def model_parameters():
     return Model_Parameters(number_neurons, func, solver, train_input_norm, train_output_norm, test_input_norm,
                             test_output_norm)
 
-def continue_or_not():
 
+def continue_or_not():
     while True:
 
         print(Message_Inputs.CONTINUE_PREDICT.value)
@@ -173,11 +178,11 @@ def continue_or_not():
 
     return int(question)
 
-def user_inputs():
 
+def user_inputs():
     inputs = Model_Inputs()
 
-    #Creating a list that stores the values entered by the user
+    # Creating a list that stores the values entered by the user
 
     input_values = [inputs.age, inputs.sex, inputs.siblings_spouses, inputs.parents_children,
                     inputs.fare_paid, inputs.socieconomic_class, inputs.port_embarkation]
@@ -186,8 +191,8 @@ def user_inputs():
 
     return input_values
 
-def user_model_choose():
 
+def user_model_choose():
     while True:
 
         train_choice_input = training_choice()
@@ -228,11 +233,9 @@ def user_model_choose():
             question = continue_or_not()
 
             if question == 0:
-
                 break
 
             if question == 2:
-
                 train_choice_input = Train_Choice.CONTINUE.value
 
         if train_choice_input == Train_Choice.DEFINE_PARAMETERS.value:
