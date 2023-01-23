@@ -13,11 +13,11 @@ def main ():
         output_model = model.predict(inputs)
 
         if output_model[0]==1:
-            print("The model result is: Survived\n")
+            print("\nThe model result is: Survived\n")
             teste="The model result is: Survived"
 
         else:
-            print("The model result is: Died\n")
+            print("\nThe model result is: Died\n")
             teste = "The model result is: Died"
         time.sleep(2)
 

@@ -13,3 +13,4 @@ class Message_Error (Enum):
     ONE_TWO_THREE = "The value must be 1, 2 or 3. Try again."
     C_Q_S = "The value must be C, Q or S. Try again."
     WRONG_VALUE = 'Wrong value, please try again: '
+    NUMBER = 'The value must be 0, 1 or 2'
