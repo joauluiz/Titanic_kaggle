@@ -193,6 +193,7 @@ def user_inputs():
 
 
 def user_model_choose():
+
     while True:
 
         train_choice_input = training_choice()
