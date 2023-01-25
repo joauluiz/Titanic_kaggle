@@ -16,7 +16,6 @@ class Model_Parameters_Api(BaseModel):
 
 
 class Model_Inputs_Api(BaseModel):
-
     age = input_float_values(Message_Inputs.AGE.value)
 
     siblings_spouses = input_float_values(Message_Inputs.SIBLINGS_SPOUSES.value)
