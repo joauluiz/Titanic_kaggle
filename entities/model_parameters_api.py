@@ -1,31 +1,61 @@
-from entities.model_inputs import input_float_values, input_sex, input_socieconomic_class, input_port_embarkation
-from enums.message_inputs import Message_Inputs
-from user import model_function, data_norm, model_solver, model_neurons
-from pydantic import BaseModel
+from enums.gender import Gender
+from enums.port_embarkation import Port_Embarkation
+from pydantic import BaseModel, validator
 
 
-class Model_Parameters_Api(BaseModel):
-    arbitrary_types_allowed = True
-    number_neurons = model_neurons()
-    function = model_function()
-    solver = model_solver()
-    train_output_norm = 0
-    train_input_norm = 0
-    test_output_norm = 0
-    test_input_norm = 0
+# class Model_Parameters_Api(BaseModel):
+#     arbitrary_types_allowed = True
+#     number_neurons = model_neurons()
+#     function = model_function()
+#     solver = model_solver()
+#     train_output_norm = 0
+#     train_input_norm = 0
+#     test_output_norm = 0
+#     test_input_norm = 0
 
 
 class Model_Inputs_Api(BaseModel):
-    age = input_float_values(Message_Inputs.AGE.value)
 
-    siblings_spouses = input_float_values(Message_Inputs.SIBLINGS_SPOUSES.value)
+    age = float
 
-    parents_children = input_float_values(Message_Inputs.PARENTS_CHILDREN.value)
+    siblings_spouses = float
 
-    fare_paid = input_float_values(Message_Inputs.FARE_PAID.value)
+    parents_children = float
 
-    sex = input_sex()
+    fare_paid = float
 
-    socieconomic_class = input_socieconomic_class()
+    sex = Gender
 
-    port_embarkation = input_port_embarkation()
+    socieconomic_class = int
+
+    port_embarkation = Port_Embarkation
+
+    @validator('age', allow_reuse = True, check_fields=False)
+    def must_be_greater_than_zero(cls, age):
+        if age <= 0:
+            raise ValueError('Age must be greater than zero')
+        return age
+
+    @validator('siblings_spouses', allow_reuse = True, check_fields=False)
+    def must_be_greater_than_zero(cls, siblings_spouses):
+        if siblings_spouses <= 0:
+            raise ValueError('The siblings or spouses values must be greater than zero')
+        return siblings_spouses
+
+    @validator('parents_children', allow_reuse = True, check_fields=False)
+    def must_be_greater_than_zero(cls, parents_children):
+        if parents_children <= 0:
+            raise ValueError('The parents or children values must be greater than zero')
+        return parents_children
+
+    @validator('fare_paid', allow_reuse = True, check_fields=False)
+    def must_be_greater_than_zero(cls, fare_paid):
+        if fare_paid <= 0:
+            raise ValueError('The fare paid values must be greater than zero')
+        return fare_paid
+
+    @validator('socieconomic_class', allow_reuse = True, check_fields=False)
+    def must_be_greater_than_zero(cls, socieconomic_class):
+        if socieconomic_class in [1, 2, 3]:
+            raise ValueError('The socieconomic class values must be greater than zero')
+        return socieconomic_class

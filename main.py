@@ -3,15 +3,13 @@ import time
 from user import user_model_choose, user_inputs
 
 
-
 def main():
-
     acc, model = user_model_choose()
 
     while True:
         inputs = user_inputs()
 
-        #teste = app()
+        # teste = app()
 
         output_model = model.predict(inputs)
 
