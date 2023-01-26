@@ -1,8 +1,4 @@
-import time
-
-import numpy as np
 from fastapi import FastAPI
-
 import mlp
 from entities.model_parameters import Model_Parameters
 from entities.model_parameters_api import  Model_Inputs_Api
@@ -10,17 +6,16 @@ from user import  data_norm
 app = FastAPI()
 
 
-@app.get("/teste")
-# teste : http://127.0.0.1:8000/teste/1/relu/sgd/10/2/2/10/1/1/c
-def out_model(parameters: Model_Inputs_Api):
+@app.post("/")
+def out_model(parameters: Model_Inputs_Api, response_model= message):
 
-    parameters.train_output_norm, parameters.train_input_norm, \
-        parameters.test_output_norm, parameters.test_input_norm = data_norm()
+    train_output_norm, train_input_norm, \
+        test_output_norm, test_input_norm = data_norm()
 
     acc, model = mlp.train_model(Model_Parameters(1, 'relu',
-                                                  'sgd', parameters.train_input_norm,
-                                                  parameters.train_output_norm, parameters.test_input_norm,
-                                                  parameters.test_output_norm))
+                                                  'sgd', train_input_norm,
+                                                  train_output_norm, test_input_norm,
+                                                  test_output_norm))
 
     print("The accuracy for the model is: ", round(acc * 100, 2), "%\n")
 
