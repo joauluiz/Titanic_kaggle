@@ -14,3 +14,4 @@ class Message_Error (Enum):
     C_Q_S = "The value must be C, Q or S. Try again."
     WRONG_VALUE = 'Wrong value, please try again: '
     NUMBER = 'The value must be 0, 1 or 2'
+    INCORRECT_USER = 'The username and password are incorrect'
