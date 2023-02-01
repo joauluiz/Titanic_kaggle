@@ -54,6 +54,8 @@ class Model_Inputs_Api(BaseModel):
     @validator('gender')
     def must_be_male_female(cls, gender):
 
+
+
        if gender not in Gender:
 
             raise ValueError('Gender must be male or female')

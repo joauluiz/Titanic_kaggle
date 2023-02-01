@@ -55,11 +55,13 @@ def output_message(number_output):
     return message
 
 
-@app.post("/")
-async def out_model(parameters: Model_Inputs_Api, user = Depends(get_current_username)):
+@app.post("/predict")
+async def out_model(parameters: Model_Inputs_Api,  user = Depends(get_current_username)):
 
     train_output_norm, train_input_norm, \
         test_output_norm, test_input_norm = data_norm()
+
+    #chamada Banco de Dados
 
     acc, model = mlp.train_model(Model_Parameters(1, 'relu',
                                                   'sgd', train_input_norm,
@@ -74,4 +76,4 @@ async def out_model(parameters: Model_Inputs_Api, user = Depends(get_current_use
 
     number_output = output_model[0]
 
-    return output_message(number_output)
+    return output_message(number_output) # Todo refazer

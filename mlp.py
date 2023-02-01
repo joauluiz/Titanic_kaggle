@@ -5,6 +5,9 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import cross_validate
 from sklearn.metrics import accuracy_score
 import warnings
+
+from sklearn.svm import SVC
+
 from entities.model_best_parameters import Best_Model_Parameters
 from entities.model_parameters import Model_Parameters
 from enums.message_answer import Message_Best, Messages
@@ -199,4 +202,7 @@ def retrieve_best_parameters():
     prints_best_parameters(best_parameters.accuracy, best_parameters.function, best_parameters.solver,
                            best_parameters.number_neurons)
 
+
+
     return best_parameters.accuracy, best_parameters.model
+
