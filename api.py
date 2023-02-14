@@ -1,5 +1,5 @@
 import asyncio
-
+import subprocess
 from fastapi import FastAPI, Depends, HTTPException, status
 from starlette import status
 import mlp
@@ -77,3 +77,7 @@ async def out_model(parameters: Model_Inputs_Api,  user = Depends(get_current_us
     number_output = output_model[0]
 
     return output_message(number_output) # Todo refazer
+
+if __name__ == "__main_":
+
+    subprocess.run(["uvicorn", "teste:app", "--reload"])
