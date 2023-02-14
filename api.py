@@ -78,6 +78,4 @@ async def out_model(parameters: Model_Inputs_Api,  user = Depends(get_current_us
 
     return output_message(number_output) # Todo refazer
 
-if __name__ == "__main__":
 
-    app.run(host="0.0.0.0:$PORT")
