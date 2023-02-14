@@ -194,6 +194,7 @@ def user_inputs():
 
 def user_model_choose():
 
+    global acc, model
     while True:
 
         train_choice_input = training_choice()
