@@ -5,6 +5,7 @@ from starlette import status
 import mlp
 from entities.model_parameters import Model_Parameters
 from entities.model_parameters_api import Model_Inputs_Api
+from entities.model_train import ensemble
 from entities.user_credentials import User_Credentials
 from user import data_norm
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -58,19 +59,11 @@ def output_message(number_output):
 @app.post("/predict")
 async def out_model(parameters: Model_Inputs_Api,  user = Depends(get_current_username)):
 
-    train_output_norm, train_input_norm, \
-        test_output_norm, test_input_norm = data_norm()
-
-    #chamada Banco de Dados
-
-    acc, model = mlp.train_model(Model_Parameters(1, 'relu',
-                                                  'sgd', train_input_norm,
-                                                  train_output_norm, test_input_norm,
-                                                  test_output_norm))
-
     input_values = [[parameters.age, parameters.siblings_spouses, parameters.parents_children,
                      parameters.fare_paid, parameters.gender,
                      parameters.socieconomic_class, parameters.port_embarkation]]
+
+    model = ensemble()
 
     output_model = model.predict(input_values).reshape(-1, 1)
 
